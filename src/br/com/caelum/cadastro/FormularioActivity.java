@@ -1,12 +1,12 @@
 package br.com.caelum.cadastro;
 
-import android.os.Bundle;
 import android.app.Activity;
-import android.view.Menu;
+import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.Toast;
+import br.com.caelum.cadastro.dao.AlunoDao;
+import br.com.caelum.cadastro.modelo.Aluno;
 
 public class FormularioActivity extends Activity {
 
@@ -21,7 +21,12 @@ public class FormularioActivity extends Activity {
 		botaoGravar.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(FormularioActivity.this, "Você clicou no botão", Toast.LENGTH_LONG).show();
+				FormularioHelper helper = new FormularioHelper(FormularioActivity.this);
+				Aluno aluno = helper.pegaAluno();
+				AlunoDao alunoDao = new AlunoDao(FormularioActivity.this);
+				alunoDao.salva(aluno);
+				alunoDao.close();
+				finish();
 			}
 		});
 	}

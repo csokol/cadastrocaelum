@@ -1,19 +1,22 @@
 package br.com.caelum.cadastro;
 
-import android.os.Bundle;
+import java.util.List;
+
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnLongClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+import br.com.caelum.cadastro.dao.AlunoDao;
+import br.com.caelum.cadastro.modelo.Aluno;
 
 public class ListaAlunosActivity extends Activity {
 
@@ -25,10 +28,6 @@ public class ListaAlunosActivity extends Activity {
 		setContentView(R.layout.listagem_alunos);
 		
 		listAlunos = (ListView) findViewById(R.id.lista_alunos);
-		
-		String[] alunos = {"Chico", "Luan", "Paulo Jr"};
-		
-		listAlunos.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, alunos));
 		
 		listAlunos.setOnItemClickListener(new OnItemClickListener() {
 			@Override
@@ -47,6 +46,19 @@ public class ListaAlunosActivity extends Activity {
 				return true;
 			}
 		});
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		carregaLista();
+	}
+
+	private void carregaLista() {
+		AlunoDao alunoDao = new AlunoDao(this);
+		List<Aluno> alunos = alunoDao.getLista();
+		alunoDao.close();
+		listAlunos.setAdapter(new ArrayAdapter<Aluno>(this, android.R.layout.simple_list_item_1, alunos));
 	}
 	
 	@Override
