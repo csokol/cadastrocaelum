@@ -16,15 +16,25 @@ public class FormularioActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.formulario);
-		
 		botaoGravar = (Button) findViewById(R.id.botao);
+		final FormularioHelper helper = new FormularioHelper(FormularioActivity.this);
+		
+		Aluno aluno = (Aluno) getIntent().getSerializableExtra(Extras.ALUNO_SELECIONADO);
+		if (aluno != null) {
+			botaoGravar.setText("Alterar");
+			helper.colocaNoFormulario(aluno);
+		}
+		
 		botaoGravar.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				FormularioHelper helper = new FormularioHelper(FormularioActivity.this);
 				Aluno aluno = helper.pegaAluno();
 				AlunoDao alunoDao = new AlunoDao(FormularioActivity.this);
-				alunoDao.salva(aluno);
+				if (aluno.getId() == null) {
+					alunoDao.salva(aluno);
+				} else {
+					alunoDao.atualiza(aluno);
+				}
 				alunoDao.close();
 				finish();
 			}
