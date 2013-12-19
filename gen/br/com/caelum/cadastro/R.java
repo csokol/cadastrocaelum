@@ -34,7 +34,7 @@ public final class R {
         public static final int action_settings=0x7f080008;
         public static final int botao=0x7f080006;
         public static final int endereco=0x7f080003;
-        public static final int imageView1=0x7f080000;
+        public static final int foto=0x7f080000;
         public static final int lista_alunos=0x7f080007;
         public static final int menu_enviar_alunos=0x7f08000b;
         public static final int menu_mapa=0x7f08000a;

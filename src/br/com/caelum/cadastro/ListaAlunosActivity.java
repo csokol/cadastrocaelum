@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -79,10 +80,34 @@ public class ListaAlunosActivity extends Activity {
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
-		menu.add("Ligar");
-		menu.add("Enviar SMS");
-		menu.add("Achar no mapa");
-		menu.add("Navegar no site");
+		
+		MenuItem ligarOption = menu.add("Ligar");
+		Intent ligar = new Intent(Intent.ACTION_CALL);
+		ligar.setData(Uri.parse("tel:" + alunoSelecionado.getTelefone()));
+		ligarOption.setIntent(ligar);
+		
+		MenuItem smsOption = menu.add("Enviar SMS");
+		Intent sms = new Intent(Intent.ACTION_VIEW);
+		sms.putExtra("sms_body", "Olá, " + alunoSelecionado.getNome());
+		sms.setData(Uri.parse("sms:" + alunoSelecionado.getTelefone()));
+		smsOption.setIntent(sms);
+		
+		MenuItem mapOption = menu.add("Achar no mapa");
+		Intent map = new Intent(Intent.ACTION_VIEW);
+		map.setData(Uri.parse("geo:0,0?z=14&q=" + Uri.encode(alunoSelecionado.getEndereco())));
+		mapOption.setIntent(map);
+		
+		MenuItem siteOption = menu.add("Navegar no site");
+		Intent site = new Intent(Intent.ACTION_VIEW);
+		String url = alunoSelecionado.getSite();
+		if (url.startsWith("http:")) {
+			site.setData(Uri.parse(url));
+		} else {
+			site.setData(Uri.parse("http:" + url));
+		}
+		siteOption.setIntent(site);
+		
+		
 		MenuItem deletar = menu.add("Deletar");
 		deletar.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 			@Override

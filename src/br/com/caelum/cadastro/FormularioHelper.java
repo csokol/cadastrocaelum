@@ -1,24 +1,29 @@
 package br.com.caelum.cadastro;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.SeekBar;
-import android.widget.TextView;
 import br.com.caelum.cadastro.modelo.Aluno;
 
 public class FormularioHelper {
 
 	private Aluno aluno = new Aluno();
-	private TextView endereco;
-	private TextView nome;
-	private TextView site;
+	private EditText endereco;
+	private EditText nome;
+	private EditText site;
 	private SeekBar nota;
-	private TextView telefone;
+	private EditText telefone;
+	private ImageView foto;
 
 	public FormularioHelper(FormularioActivity formularioActivity) {
-		endereco = (TextView) formularioActivity.findViewById(R.id.endereco);
-		nome = (TextView) formularioActivity.findViewById(R.id.nome);
-		site = (TextView) formularioActivity.findViewById(R.id.site);
+		endereco = (EditText) formularioActivity.findViewById(R.id.endereco);
+		nome = (EditText) formularioActivity.findViewById(R.id.nome);
+		site = (EditText) formularioActivity.findViewById(R.id.site);
 		nota = (SeekBar) formularioActivity.findViewById(R.id.nota);
-		telefone = (TextView) formularioActivity.findViewById(R.id.telefone);
+		telefone = (EditText) formularioActivity.findViewById(R.id.telefone);
+		foto = (ImageView) formularioActivity.findViewById(R.id.foto);
 	}
 
 	public Aluno pegaAluno() {
@@ -39,6 +44,21 @@ public class FormularioHelper {
 		site.setText(aluno.getSite());
 		nota.setProgress((int) aluno.getNota());
 		telefone.setText(aluno.getTelefone());
+		if (aluno.getFoto() != null) {
+			carregaImagem(aluno.getFoto());
+		}
+		
+	}
+	
+	public ImageView getFoto() {
+		return foto;
 	}
 
+	public void carregaImagem(String fotoPath) {
+		aluno.setFoto(fotoPath);
+		Bitmap bitmap = BitmapFactory.decodeFile(fotoPath);
+		Bitmap fotoReduzida = Bitmap.createScaledBitmap(bitmap, 100, 100, true);
+		foto.setImageBitmap(fotoReduzida);
+	}
+	
 }

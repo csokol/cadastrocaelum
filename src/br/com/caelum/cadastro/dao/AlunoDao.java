@@ -51,6 +51,7 @@ public class AlunoDao extends SQLiteOpenHelper {
 		values.put("site", aluno.getSite());
 		values.put("nome", aluno.getNome());
 		values.put("nota", aluno.getNota());
+		values.put("foto", aluno.getFoto());
 		return values;
 	}
 	
