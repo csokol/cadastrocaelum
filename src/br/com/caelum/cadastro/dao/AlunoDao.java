@@ -3,6 +3,7 @@ package br.com.caelum.cadastro.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.caelum.cadastro.R;
 import br.com.caelum.cadastro.modelo.Aluno;
 import android.content.ContentValues;
 import android.content.Context;
