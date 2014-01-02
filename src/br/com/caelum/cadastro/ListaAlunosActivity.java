@@ -1,5 +1,6 @@
 package br.com.caelum.cadastro;
 
+import java.net.ResponseCache;
 import java.util.List;
 
 import android.app.Activity;
@@ -16,11 +17,13 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+import br.com.caelum.cadastro.converter.AlunoConverter;
 import br.com.caelum.cadastro.dao.AlunoDao;
 import br.com.caelum.cadastro.modelo.Aluno;
+import br.com.caelum.cadastro.task.EnviaContatosTask;
+import br.com.caelum.support.WebClient;
 
 public class ListaAlunosActivity extends Activity {
 	private Aluno alunoSelecionado;
@@ -123,6 +126,7 @@ public class ListaAlunosActivity extends Activity {
 		menu.add("Enviar email");
 	}
 	
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		super.onOptionsItemSelected(item);
@@ -133,6 +137,9 @@ public class ListaAlunosActivity extends Activity {
 			case R.id.menu_novo:
 				Intent intent = new Intent(this, FormularioActivity.class);
 				startActivity(intent);
+				return true;
+			case R.id.menu_enviar_alunos:
+				new EnviaContatosTask(this).execute();
 				return true;
 			default:
 				Toast.makeText(this, "Item selecionado " + itemId, Toast.LENGTH_LONG).show();
