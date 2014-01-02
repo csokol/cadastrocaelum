@@ -85,5 +85,12 @@ public class AlunoDao extends SQLiteOpenHelper {
 		ContentValues values = toContentValues(aluno);
 		getWritableDatabase().update(TABELA, values, "id=?", args);
 	}
+
+	public boolean existeAluno(String address) {
+		String[] args = {address};
+		Cursor cursor = getReadableDatabase().rawQuery("select * from " + TABELA + " where tel=?", args);
+		
+		return cursor.getCount() != 0;
+	}
 	
 }
