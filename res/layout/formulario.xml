@@ -10,7 +10,8 @@
 	    <ImageView
 	        android:id="@+id/foto"
 	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
+	        android:layout_height="100px"
+	        android:background="#33FFFF"
 	        android:src="@drawable/ic_launcher" />
 	    
 	    <TextView

@@ -1,6 +1,5 @@
 package br.com.caelum.cadastro;
 
-import java.net.ResponseCache;
 import java.util.List;
 
 import android.app.Activity;
@@ -19,15 +18,16 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
-import br.com.caelum.cadastro.converter.AlunoConverter;
 import br.com.caelum.cadastro.dao.AlunoDao;
+import br.com.caelum.cadastro.fragment.ProvasActivity;
 import br.com.caelum.cadastro.modelo.Aluno;
 import br.com.caelum.cadastro.task.EnviaContatosTask;
-import br.com.caelum.support.WebClient;
 
 public class ListaAlunosActivity extends Activity {
 	private Aluno alunoSelecionado;
 	private ListView listAlunos;
+	private ListaAlunoAdapter adapter;
+	private List<Aluno> alunos;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +35,7 @@ public class ListaAlunosActivity extends Activity {
 		setContentView(R.layout.listagem_alunos);
 		
 		listAlunos = (ListView) findViewById(R.id.lista_alunos);
+		listAlunos = find(R.id.lista_alunos);
 		registerForContextMenu(listAlunos);
 		
 		listAlunos.setOnItemClickListener(new OnItemClickListener() {
@@ -49,7 +50,6 @@ public class ListaAlunosActivity extends Activity {
 		});
 		
 		listAlunos.setOnItemLongClickListener(new OnItemLongClickListener() {
-
 			@Override
 			public boolean onItemLongClick(AdapterView<?> adapter, View view,
 					int posicao, long id) {
@@ -67,9 +67,9 @@ public class ListaAlunosActivity extends Activity {
 
 	private void carregaLista() {
 		AlunoDao alunoDao = new AlunoDao(this);
-		List<Aluno> alunos = alunoDao.getLista();
+		alunos = alunoDao.getLista();
 		alunoDao.close();
-		ListaAlunoAdapter adapter = new ListaAlunoAdapter(alunos, this);
+		adapter = new ListaAlunoAdapter(alunos, this);
 		listAlunos.setAdapter(adapter);
 	}
 	
@@ -81,9 +81,15 @@ public class ListaAlunosActivity extends Activity {
 		return true;
 	}
 	
+	private <T> T find(int id) {
+		return (T) findViewById(id);
+	}
+	
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
+		
+		Toast.makeText(this, v.toString(), Toast.LENGTH_LONG).show();
 		
 		MenuItem ligarOption = menu.add("Ligar");
 		Intent ligar = new Intent(Intent.ACTION_CALL);
@@ -98,7 +104,8 @@ public class ListaAlunosActivity extends Activity {
 		
 		MenuItem mapOption = menu.add("Achar no mapa");
 		Intent map = new Intent(Intent.ACTION_VIEW);
-		map.setData(Uri.parse("geo:0,0?z=14&q=" + Uri.encode(alunoSelecionado.getEndereco())));
+//		map.setData(Uri.parse("geo:0,0?z=14&q=" + Uri.encode(alunoSelecionado.getEndereco())));
+		map.setData(Uri.parse("geo:47.6,-122.3?z=14"));
 		mapOption.setIntent(map);
 		
 		MenuItem siteOption = menu.add("Navegar no site");
@@ -141,8 +148,23 @@ public class ListaAlunosActivity extends Activity {
 			case R.id.menu_enviar_alunos:
 				new EnviaContatosTask(this).execute();
 				return true;
+			case R.id.menu_receber_provas:
+				Intent provas = new Intent(this, ProvasActivity.class);
+				startActivity(provas);
+				return true;
+			case R.id.menu_mapa:
+				Intent proximos = new Intent(this, MostraAlunosProximos.class);
+				startActivity(proximos);
+				return true;
+			case R.id.menu_preferencias:
+				Aluno aluno = new Aluno();
+				aluno.setNome("Aluno " + alunos.size());
+				alunos.add(aluno);
+				this.listAlunos.invalidate();
+				Toast.makeText(this, alunos.size() + "", Toast.LENGTH_LONG).show();
+				return true;
 			default:
-				Toast.makeText(this, "Item selecionado " + itemId, Toast.LENGTH_LONG).show();
+//				Toast.makeText(this, "Item selecionado " + itemId, Toast.LENGTH_LONG).show();
 				return false;
 		}
 	}

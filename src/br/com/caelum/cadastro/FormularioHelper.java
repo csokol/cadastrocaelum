@@ -57,8 +57,8 @@ public class FormularioHelper {
 	public void carregaImagem(String fotoPath) {
 		aluno.setFoto(fotoPath);
 		Bitmap bitmap = BitmapFactory.decodeFile(fotoPath);
-		Bitmap fotoReduzida = Bitmap.createScaledBitmap(bitmap, 100, 100, true);
-		foto.setImageBitmap(fotoReduzida);
+		bitmap = Bitmap.createScaledBitmap(bitmap, 100, 100, true);
+		foto.setImageBitmap(bitmap);
 	}
 	
 }
